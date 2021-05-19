@@ -1,0 +1,48 @@
+{
+  "name": "milordblog",
+  "version": "1.0.0",
+  "description": "\"express postgresql blog\"",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MilordVladyslav/milordblog.git"
+  },
+  "keywords": [
+    "express",
+    "postgresql",
+    "postgres",
+    "node.js",
+    "node",
+    "knex",
+    "passport",
+    "jwt",
+    "jsonwebtoken",
+    "authentication",
+    "authorization",
+    "pg",
+    "crud"
+  ],
+  "author": "MilordVladyslav",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MilordVladyslav/milordblog/issues"
+  },
+  "homepage": "https://github.com/MilordVladyslav/milordblog#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "browserify": "^17.0.0",
+    "cookie-parser": "^1.4.5",
+    "cuid": "^2.1.8",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.6",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "pg": "^8.6.0"
+  }
+}
