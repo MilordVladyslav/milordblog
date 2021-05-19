@@ -4,7 +4,8 @@
   "description": "\"express postgresql blog\"",
   "main": "server.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "nodemon --watch . --exec babel-node -- server"
   },
   "repository": {
     "type": "git",
@@ -44,5 +45,14 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "babel-watch": "^7.4.1",
+    "nodemon": "^2.0.7"
   }
 }
