@@ -1,0 +1,116 @@
+{
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.formatOnPaste": false,
+  "editor.detectIndentation": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true,
+    "source.fixAll.eslint": true
+  },
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "eslint.validate": ["vue", "html", "javascript"],
+  "explorer.openEditors.visible": 1,
+  "emmet.showAbbreviationSuggestions": true,
+  "files.autoSave": "off",
+  "js/ts.implicitProjectConfig.checkJs": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "[javascript]": {
+    "editor.showUnused": true,
+    // "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    // "editor.defaultFormatter": "HookyQR.beautify"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    // "editor.defaultFormatter": "HookyQR.beautify"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    // "editor.defaultFormatter": "HookyQR.beautify"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    // "editor.defaultFormatter": "octref.vetur"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.colorCustomizations": {},
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.jsxBracketSameLine": true,
+  "cSpell.words": [
+    "AE",
+    "AE’s",
+    "CLTV",
+    "Condotel",
+    "FL's",
+    "HCLTV",
+    "HELOAN",
+    "HELOC",
+    "Helvetica",
+    "Inve",
+    "Iqualifi",
+    "LLC's",
+    "Parens",
+    "Qualifi",
+    "Rollbar",
+    "Semibold",
+    "axios",
+    "browserslist",
+    "cellspacing",
+    "clickaway",
+    "colspan",
+    "curr",
+    "dasharray",
+    "digifi",
+    "evenodd",
+    "flexbox",
+    "haqv",
+    "homebuyer",
+    "iframe",
+    "keydown",
+    "keyup",
+    "linecap",
+    "linejoin",
+    "maxlength",
+    "mixins",
+    "mouseleave",
+    "novalidate",
+    "nowrap",
+    "onclick",
+    "prequal",
+    "quuoa",
+    "referer",
+    "rgba",
+    "rowspan",
+    "s",
+    "sproutmortgage",
+    "svgs",
+    "tabindex",
+    "tbody",
+    "thead",
+    "typeof",
+    "vuex",
+    "workphone",
+    "xlink"
+  ]
+}
