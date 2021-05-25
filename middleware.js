@@ -34,8 +34,9 @@ function notFound(req, res) {
 }
 
 function handleValidationError(err, req, res, next) {
-  if (err.code === '23502') err.name = 'ValidationError'
+  if ((err.code || '').match(/^2[23]/)) err.name = 'ValidationError'
   if (err.name !== 'ValidationError') return next(err)
-
-  res.status(400).json({ error: err._message, errorDetails: err.errors })
+  const msg = err._message || err.message
+  console.log(msg)
+  res.status(400).json({ error: msg, errorDetails: err.errors })
 }
