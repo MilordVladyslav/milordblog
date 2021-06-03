@@ -37,6 +37,5 @@ function handleValidationError(err, req, res, next) {
   if ((err.code || '').match(/^2[23]/)) err.name = 'ValidationError'
   if (err.name !== 'ValidationError') return next(err)
   const msg = err._message || err.message
-  console.log(msg)
   res.status(400).json({ error: msg, errorDetails: err.errors })
 }
