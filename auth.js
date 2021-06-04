@@ -16,6 +16,7 @@ const authenticate = passport.authenticate('local', { session: false })
 module.exports = {
   authenticate,
   login: autoCatch(login),
+  logout: autoCatch(logout),
   ensureUser: autoCatch(ensureUser)
 }
 
@@ -26,6 +27,11 @@ async function login(req, res, next) {
   })
   res.cookie('jwt', token, { httpOnly: true })
   res.json({ success: true, token: token })
+}
+
+async function logout(req, res, next) {
+  res.clearCookie('jwt')
+  res.json({ success: true })
 }
 
 async function ensureUser(req, res, next) {

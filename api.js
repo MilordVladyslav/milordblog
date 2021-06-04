@@ -51,18 +51,20 @@ async function updatePassword(req, res, next) {
   res.json({ username, role })
 }
 
-async function deleteUser({ req, res, next }) {
+async function deleteUser(req, res, next) {
   const username = req.body.delete_username || ''
   if (req.user.role === 'admin') {
     const users = await Users.deleteUser(username)
     res.json(users)
   } else {
     if (
-      req.body.delete_username.toLowerCase() === req.user.username.toLowerCase()
+      req.body.delete_username.toLowerCase() !== req.user.username.toLowerCase()
     ) {
-      res.json({ message: 'You do not have a permission to delete others' })
+      return res
+        .status(401)
+        .json({ errors: 'You do not have a permission to delete others' })
     } else {
-      Users.deleteUser(req.body)
+      Users.deleteUser(username)
     }
     res.json({ message: 'Your account is successfully deleted' })
   }
