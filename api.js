@@ -1,12 +1,17 @@
 const autoCatch = require('./lib/auto-catch')
 const Users = require('./models/users')
+const Posts = require('./models/posts')
 module.exports = autoCatch({
   createUser,
   login,
   usersList,
   updateUsername,
   updatePassword,
-  deleteUser
+  deleteUser,
+  createPost,
+  getPost,
+  postsList,
+  updatePost
 })
 
 async function createUser(req, res, next) {
@@ -16,6 +21,47 @@ async function createUser(req, res, next) {
   const user = await Users.create(req.body)
   const { username, role } = user
   res.json({ username, role })
+}
+
+async function createPost(req, res, next) {
+  let errors = existedFields(req.body, ['title', 'description', 'post_id'])
+  if (errors.length) {
+    res.status(400).json({ errors: errors })
+  }
+  const post = await Posts.createPost(req.body)
+  res.json(post)
+}
+
+async function getPost(req, res, next) {
+  let errors = existedFields(req.body, ['id'])
+  if (errors.length) {
+    res.status(400).json({ errors })
+  }
+  const post = await Posts.getPost(req.body.id)
+  res.json(post)
+}
+
+async function postsList(req, res, next) {
+  const users = await Posts.usersList(req.body)
+  res.json(users)
+}
+
+async function updatePost(req, res, next) {
+  let errors = existedFields(req.body, ['title', 'description', 'post_id'])
+  if (errors.length) {
+    res.status(400).json({ errors: errors })
+  }
+  const post = await Posts.updatePost(req.body)
+  res.json(post)
+}
+
+function existedFields(reqFields = [], requiredFields = []) {
+  const errors = []
+  for (let key in requiredFields) {
+    if (!reqFields[requiredFields[key]])
+      errors.push(`${requiredFields[key]} is required`)
+  }
+  return errors
 }
 
 async function login(req, res, next) {
