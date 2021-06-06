@@ -23,7 +23,8 @@ module.exports = {
 async function login(req, res, next) {
   const token = await sign({
     username: req.user.username,
-    role: req.user.role
+    role: req.user.role,
+    id: req.user.id
   })
   res.cookie('jwt', token, { httpOnly: true })
   res.json({ success: true, token: token })
@@ -78,7 +79,8 @@ function adminStrategy() {
       if (isUser) {
         return cb(null, {
           username: user.username,
-          role: user.role
+          role: user.role,
+          id: user.id
         })
       }
     } catch (err) {

@@ -11,7 +11,8 @@ module.exports = autoCatch({
   createPost,
   getPost,
   postsList,
-  updatePost
+  updatePost,
+  deletePost
 })
 
 async function createUser(req, res, next) {
@@ -24,35 +25,41 @@ async function createUser(req, res, next) {
 }
 
 async function createPost(req, res, next) {
+  req.body.post_id = req.user.id
+  console.log(req.body)
   let errors = existedFields(req.body, ['title', 'description', 'post_id'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
-  const post = await Posts.createPost(req.body)
-  res.json(post)
+  await Posts.createPost(req.body)
+  const posts = await Posts.postsList()
+  res.json(posts)
 }
 
 async function getPost(req, res, next) {
-  let errors = existedFields(req.body, ['id'])
+  let errors = existedFields(req.query, ['id'])
   if (errors.length) {
     res.status(400).json({ errors })
   }
-  const post = await Posts.getPost(req.body.id)
+  console.log(req.query.id)
+  const post = await Posts.getPost(req.query.id)
   res.json(post)
 }
 
 async function postsList(req, res, next) {
-  const users = await Posts.usersList(req.body)
-  res.json(users)
+  const posts = await Posts.postsList(req.body)
+  res.json(posts)
 }
 
 async function updatePost(req, res, next) {
+  req.body.post_id = req.user.id
   let errors = existedFields(req.body, ['title', 'description', 'post_id'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
-  const post = await Posts.updatePost(req.body)
-  res.json(post)
+  await Posts.updatePost(req.body)
+  const posts = await Posts.postsList()
+  res.json(posts)
 }
 
 function existedFields(reqFields = [], requiredFields = []) {
@@ -114,4 +121,15 @@ async function deleteUser(req, res, next) {
     }
     res.json({ message: 'Your account is successfully deleted' })
   }
+}
+
+async function deletePost(req, res, next) {
+  req.body.post_id = req.user.id
+  let errors = existedFields(req.body, ['id'])
+  if (errors.length) {
+    res.status(400).json({ errors })
+  }
+  await Posts.deletePost(req.body)
+  const posts = await Posts.postsList()
+  res.json(posts)
 }
