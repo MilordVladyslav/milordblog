@@ -21,8 +21,6 @@ app.post('/users', api.createUser)
 app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, api.deleteUser)
 
-// app.get('/posts-list', api.postsList)
-// app.get('/post:id', api.getPost)
 app.post('/create-post', auth.ensureUser, api.createPost)
 app.get('/get-post', api.getPost)
 app.get('/posts-list', api.postsList)
