@@ -5,13 +5,35 @@ const cookieParser = require('cookie-parser')
 const api = require('./api')
 const middleware = require('./middleware')
 const auth = require('./auth')
+const multer = require('multer')
 const port = process.env.PORT || 8080
-
+const crypto = require('crypto')
+const path = require('path')
 const app = express()
 
 app.use(middleware.cors)
-app.use(express.json())
+app.use(express.json({ limit: '8192kb' }))
 app.use(cookieParser())
+app.use(express.static('public'))
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    console.log('rthmkrthkmrth')
+    cb(null, './uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({ storage: storage }).single('demo_image')
+app.post('/image', (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      res.status(400).send('Something went wrong!')
+    }
+    res.send(req.body.file)
+  })
+})
 
 app.get('/users-list', auth.ensureUser, api.usersList)
 app.get('/logout', auth.logout)
