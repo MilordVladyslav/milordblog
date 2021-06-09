@@ -29,6 +29,7 @@ app.post(
 app.get('/get-post', api.getPost)
 app.get('/posts-list', api.postsList)
 app.put('/update-post', auth.ensureUser, api.updatePost)
+app.delete('/delete-post', auth.ensureUser, api.deletePost)
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.notFound)
