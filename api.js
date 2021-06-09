@@ -26,10 +26,20 @@ async function createUser(req, res, next) {
 
 async function createPost(req, res, next) {
   req.body.post_id = req.user.id
-  console.log(req.body)
   let errors = existedFields(req.body, ['title', 'description', 'post_id'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
+  }
+  const { article_files = [] } = req.files || {}
+  if (article_files.length > 0) {
+    const host = req.get('host')
+    let articleFilesLinks = []
+    for (let i = 0; i < article_files.length; i++) {
+      articleFilesLinks.push(
+        req.protocol + '://' + host + '/' + article_files[i].path
+      )
+    }
+    req.body.files = [...articleFilesLinks]
   }
   await Posts.createPost(req.body)
   const posts = await Posts.postsList()
@@ -41,7 +51,6 @@ async function getPost(req, res, next) {
   if (errors.length) {
     res.status(400).json({ errors })
   }
-  console.log(req.query.id)
   const post = await Posts.getPost(req.query.id)
   res.json(post)
 }

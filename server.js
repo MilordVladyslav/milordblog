@@ -17,23 +17,16 @@ app.use(cookieParser())
 app.use(express.static('public'))
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    console.log('rthmkrthkmrth')
-    cb(null, './uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
+  destination: 'public',
+  filename: (req, file, callback) => {
+    console.log(file)
+    crypto.pseudoRandomBytes(16, function (err, raw) {
+      if (err) return callback(err)
+      callback(null, file.originalname)
+    })
   }
 })
-const upload = multer({ storage: storage }).single('demo_image')
-app.post('/image', (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      res.status(400).send('Something went wrong!')
-    }
-    res.send(req.body.file)
-  })
-})
+let upload = multer({ storage: storage })
 
 app.get('/users-list', auth.ensureUser, api.usersList)
 app.get('/logout', auth.logout)
@@ -43,11 +36,15 @@ app.post('/users', api.createUser)
 app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, api.deleteUser)
 
-app.post('/create-post', auth.ensureUser, api.createPost)
+app.post(
+  '/create-post',
+  auth.ensureUser,
+  upload.fields([{ name: 'article_files', maxCount: 100 }]),
+  api.createPost
+)
 app.get('/get-post', api.getPost)
 app.get('/posts-list', api.postsList)
 app.put('/update-post', auth.ensureUser, api.updatePost)
-app.delete('/delete-post', auth.ensureUser, api.deletePost)
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.notFound)
