@@ -9,19 +9,19 @@ module.exports = {
 }
 
 async function createPost(fields = {}) {
-  const post = await db('posts').insert(fields)
-  return post
+  const article = await db('articles').insert(fields)
+  return article
 }
 
 async function getPost(id = '') {
-  const post = await db('posts').where({ id })
-  return post[0]
+  const article = await db('articles').where({ id })
+  return article[0]
 }
 
 async function postsList(opts = {}) {
   const { offset = 0, limit = 25, tag = '' } = opts
 
-  const table = db('posts')
+  const table = db('articles')
   const query = tag ? table.whereRaw('? = ANY (tags)', [tag]) : table
 
   const result = await query.orderBy('id').limit(limit).offset(offset)
@@ -36,14 +36,14 @@ async function updatePost(fields = {}) {
     id = '',
     files = []
   } = fields || {}
-  const posts = await db('posts')
+  const articles = await db('articles')
     .where({ post_id, id })
     .update({ title, description, files })
-  return posts
+  return articles
 }
 
 async function deletePost(fields = {}) {
   const { post_id = '', id = '' } = fields || {}
-  const posts = await db('posts').where({ post_id, id }).del()
-  return posts
+  const articles = await db('articles').where({ post_id, id }).del()
+  return articles
 }

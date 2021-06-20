@@ -1,6 +1,6 @@
 const autoCatch = require('./lib/auto-catch')
 const Users = require('./models/users')
-const Posts = require('./models/posts')
+const Articles = require('./models/articles')
 module.exports = autoCatch({
   createUser,
   login,
@@ -41,9 +41,9 @@ async function createPost(req, res, next) {
     }
     req.body.files = [...articleFilesLinks]
   }
-  await Posts.createPost(req.body)
-  const posts = await Posts.postsList()
-  res.json(posts)
+  await Articles.createPost(req.body)
+  const articles = await Articles.postsList()
+  res.json(articles)
 }
 
 async function getPost(req, res, next) {
@@ -51,13 +51,13 @@ async function getPost(req, res, next) {
   if (errors.length) {
     res.status(400).json({ errors })
   }
-  const post = await Posts.getPost(req.query.id)
-  res.json(post)
+  const article = await Articles.getPost(req.query.id)
+  res.json(article)
 }
 
 async function postsList(req, res, next) {
-  const posts = await Posts.postsList(req.body)
-  res.json(posts)
+  const articles = await Articles.postsList(req.body)
+  res.json(articles)
 }
 
 async function updatePost(req, res, next) {
@@ -66,9 +66,9 @@ async function updatePost(req, res, next) {
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
-  await Posts.updatePost(req.body)
-  const posts = await Posts.postsList()
-  res.json(posts)
+  await Articles.updatePost(req.body)
+  const articles = await Articles.postsList()
+  res.json(articles)
 }
 
 function existedFields(reqFields = [], requiredFields = []) {
@@ -138,7 +138,7 @@ async function deletePost(req, res, next) {
   if (errors.length) {
     res.status(400).json({ errors })
   }
-  await Posts.deletePost(req.body)
-  const posts = await Posts.postsList()
-  res.json(posts)
+  await Articles.deletePost(req.body)
+  const articles = await Articles.postsList()
+  res.json(articles)
 }
