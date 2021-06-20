@@ -16,20 +16,20 @@ app.get('/users-list', auth.ensureUser, api.usersList)
 app.get('/logout', auth.logout)
 app.put('/update-username', auth.authenticate, api.updateUsername)
 app.put('/update-password', auth.authenticate, api.updatePassword)
-app.post('/users', api.createUser)
-app.post('/login', auth.authenticate, auth.login)
+app.article('/users', api.createUser)
+app.article('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, api.deleteUser)
 
-app.post(
-  '/create-post',
+app.article(
+  '/create-article',
   auth.ensureUser,
   upload.fields([{ name: 'article_files', maxCount: 100 }]),
   api.createPost
 )
-app.get('/get-post', api.getPost)
-app.get('/posts-list', api.postsList)
-app.put('/update-post', auth.ensureUser, api.updatePost)
-app.delete('/delete-post', auth.ensureUser, api.deletePost)
+app.get('/get-article', api.getPost)
+app.get('/articles-list', api.postsList)
+app.put('/update-article', auth.ensureUser, api.updatePost)
+app.delete('/delete-article', auth.ensureUser, api.deletePost)
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.notFound)
