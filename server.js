@@ -16,11 +16,11 @@ app.get('/users-list', auth.ensureUser, api.usersList)
 app.get('/logout', auth.logout)
 app.put('/update-username', auth.authenticate, api.updateUsername)
 app.put('/update-password', auth.authenticate, api.updatePassword)
-app.article('/users', api.createUser)
-app.article('/login', auth.authenticate, auth.login)
+app.post('/create-user', api.createUser)
+app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, api.deleteUser)
 
-app.article(
+app.post(
   '/create-article',
   auth.ensureUser,
   upload.fields([{ name: 'article_files', maxCount: 100 }]),

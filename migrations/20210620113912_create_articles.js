@@ -7,7 +7,7 @@ exports.up = function (knex) {
     table.string('description').notNullable()
     table.specificType('files', 'TEXT[]')
     table.specificType('tags', 'TEXT[]')
-    table.specificType('reaction', 'TEXT[]')
+    table.specificType('reactions', 'TEXT[]')
     table.string('article_status').notNullable().defaultTo('published')
     table.timestamp('created_at').defaultTo(knex.raw('now()'))
   })
