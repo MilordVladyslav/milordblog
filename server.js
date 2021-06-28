@@ -14,16 +14,24 @@ app.use(express.static('public'))
 
 app.get('/users-list', auth.ensureUser, api.usersList)
 app.get('/logout', auth.logout)
-app.put('/update-username', auth.authenticate, api.updateUsername)
+
+app.put('/update-user', auth.ensureUser, api.updateUser) //ok
+app.put(
+  '/update-avatar',
+  auth.ensureUser,
+  upload.fields([{ name: 'avatar' }]),
+  api.updateAvatar
+)
 app.put('/update-password', auth.authenticate, api.updatePassword)
-app.post('/create-user', api.createUser)
+app.post('/create-user', api.createUser) //ok
+
 app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, api.deleteUser)
 
 app.post(
   '/create-article',
   auth.ensureUser,
-  upload.fields([{ name: 'article_files', maxCount: 100 }]),
+  upload.fields([{ name: 'article_files' }]),
   api.createPost
 )
 app.get('/get-article', api.getPost)

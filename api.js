@@ -5,23 +5,57 @@ module.exports = autoCatch({
   createUser,
   login,
   usersList,
-  updateUsername,
+  updateUser,
   updatePassword,
   deleteUser,
   createPost,
   getPost,
   postsList,
   updatePost,
-  deletePost
+  deletePost,
+  updateAvatar
 })
-
 async function createUser(req, res, next) {
-  if (!req.body.password) {
-    return res.status(400).json({ errors: 'Password is required' })
+  let errors = existedFields(req.body, ['username', 'password', 'email'])
+  if (errors.length) {
+    res.status(400).json({ errors: errors })
   }
-  const user = await Users.create(req.body)
-  const { username, role } = user
-  res.json({ username, role })
+  const preparedValues = trimStrings(req.body)
+  const user = await Users.create(preparedValues)
+  console.log(req.user)
+  if (user.severity) {
+    return res.status(500).json({ errors: 'An unexpected error occurred' })
+  }
+  const {
+    id,
+    username,
+    role,
+    birthday,
+    visibility,
+    gender,
+    description,
+    avatar
+  } = user
+  res.json({
+    id,
+    username,
+    role,
+    birthday,
+    visibility,
+    gender,
+    description,
+    avatar
+  })
+}
+
+async function updateAvatar(req, res, next) {
+  const { avatar = {} } = req.files || {}
+  let errors = existedFields(req.files, ['avatar'])
+  if (errors.length) {
+    res.status(400).json({ errors: errors })
+  }
+  console.log(avatar)
+  res.status(200).json({ success: true })
 }
 
 async function createPost(req, res, next) {
@@ -71,17 +105,17 @@ async function updatePost(req, res, next) {
   res.json(articles)
 }
 
-function existedFields(reqFields = [], requiredFields = []) {
+function existedFields(reqBody = [], requiredFields = []) {
   const errors = []
   for (let key in requiredFields) {
-    if (!reqFields[requiredFields[key]])
+    if (!reqBody[requiredFields[key]])
       errors.push(`${requiredFields[key]} is required`)
   }
   return errors
 }
 
 async function login(req, res, next) {
-  const user = await Users.login(req.body)
+  const user = await Users.get(req.body)
   const { username, role } = user
   res.json({ username, role })
 }
@@ -95,13 +129,35 @@ async function usersList(req, res, next) {
   }
 }
 
-async function updateUsername(req, res, next) {
-  if (!req.body.new_username) {
-    return res.status(400).json({ errors: 'Username is required' })
+async function updateUser(req, res, next) {
+  const preparedValues = trimStrings(req.body)
+  console.log(preparedValues)
+  req.body.id = req.user.id
+  console.log(req.user)
+  const user = await Users.updateUser(preparedValues)
+  if (user.severity) {
+    return res.status(500).json({ errors: 'An unexpected error occurred' })
   }
-  const user = await Users.updateUsername(req.body)
-  const { username, role } = user
-  res.json({ username, role })
+  const {
+    id,
+    username,
+    role,
+    birthday,
+    visibility,
+    gender,
+    description,
+    avatar
+  } = user
+  res.json({
+    id,
+    username,
+    role,
+    birthday,
+    visibility,
+    gender,
+    description,
+    avatar
+  })
 }
 
 async function updatePassword(req, res, next) {
@@ -116,7 +172,7 @@ async function updatePassword(req, res, next) {
 async function deleteUser(req, res, next) {
   const username = req.body.delete_username || ''
   if (req.user.role === 'admin') {
-    const users = await Users.deleteUser(username)
+    const users = await Users.delete(username)
     res.json(users)
   } else {
     if (
@@ -126,7 +182,7 @@ async function deleteUser(req, res, next) {
         .status(401)
         .json({ errors: 'You do not have a permission to delete others' })
     } else {
-      Users.deleteUser(username)
+      Users.delete(username)
     }
     res.json({ message: 'Your account is successfully deleted' })
   }
@@ -141,4 +197,13 @@ async function deletePost(req, res, next) {
   await Articles.deletePost(req.body)
   const articles = await Articles.postsList()
   res.json(articles)
+}
+
+function trimStrings(reqBody) {
+  for (const value in reqBody) {
+    if (typeof reqBody[value] === 'string') {
+      reqBody[value] = reqBody[value].trim()
+    }
+  }
+  return reqBody
 }
