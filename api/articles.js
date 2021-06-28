@@ -1,14 +1,14 @@
 const autoCatch = require('../lib/auto-catch')
 const Articles = require('../models/articles')
 module.exports = autoCatch({
-  createPost,
-  getPost,
-  postsList,
-  updatePost,
-  deletePost
+  createArticle,
+  getArticle,
+  articlesList,
+  updateArticle,
+  deleteArticle
 })
 
-async function createPost(req, res, next) {
+async function createArticle(req, res, next) {
   req.body.post_id = req.user.id
   let errors = existedFields(req.body, ['title', 'description', 'post_id'])
   if (errors.length) {
@@ -25,33 +25,33 @@ async function createPost(req, res, next) {
     }
     req.body.files = [...articleFilesLinks]
   }
-  await Articles.createPost(req.body)
-  const articles = await Articles.postsList()
+  await Articles.createArticle(req.body)
+  const articles = await Articles.articlesList()
   res.json(articles)
 }
 
-async function getPost(req, res, next) {
+async function getArticle(req, res, next) {
   let errors = existedFields(req.query, ['id'])
   if (errors.length) {
     res.status(400).json({ errors })
   }
-  const article = await Articles.getPost(req.query.id)
+  const article = await Articles.getArticle(req.query.id)
   res.json(article)
 }
 
-async function postsList(req, res, next) {
-  const articles = await Articles.postsList(req.body)
+async function articlesList(req, res, next) {
+  const articles = await Articles.articlesList(req.body)
   res.json(articles)
 }
 
-async function updatePost(req, res, next) {
+async function updateArticle(req, res, next) {
   req.body.post_id = req.user.id
   let errors = existedFields(req.body, ['title', 'description', 'post_id'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
-  await Articles.updatePost(req.body)
-  const articles = await Articles.postsList()
+  await Articles.updateArticle(req.body)
+  const articles = await Articles.articlesList()
   res.json(articles)
 }
 
@@ -64,13 +64,13 @@ function existedFields(reqFields = [], requiredFields = []) {
   return errors
 }
 
-async function deletePost(req, res, next) {
+async function deleteArticle(req, res, next) {
   req.body.post_id = req.user.id
   let errors = existedFields(req.body, ['id'])
   if (errors.length) {
     res.status(400).json({ errors })
   }
-  await Articles.deletePost(req.body)
-  const articles = await Articles.postsList()
+  await Articles.deleteArticle(req.body)
+  const articles = await Articles.articlesList()
   res.json(articles)
 }

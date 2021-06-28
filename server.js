@@ -21,16 +21,16 @@ app.post('/create-user', apiUsers.createUser)
 app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, apiUsers.deleteUser)
 
-app.get('/get-article', apiArticles.getPost)
-app.get('/articles-list', apiArticles.postsList)
-app.put('/update-article', auth.ensureUser, apiArticles.updatePost)
+app.get('/get-article', apiArticles.getArticle)
+app.get('/articles-list', apiArticles.articlesList)
+app.put('/update-article', auth.ensureUser, apiArticles.updateArticle)
 app.post(
   '/create-article',
   auth.ensureUser,
   upload.fields([{ name: 'article_files', maxCount: 100 }]),
-  apiArticles.createPost
+  apiArticles.createArticle
 )
-app.delete('/delete-article', auth.ensureUser, apiArticles.deletePost)
+app.delete('/delete-article', auth.ensureUser, apiArticles.deleteArticle)
 
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
