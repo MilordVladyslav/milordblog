@@ -41,6 +41,16 @@ async function updateUser(fields = {}) {
   return user
 }
 
+async function updateAvatar(fields = {}) {
+  const { avatar = '', id = -1 } = fields
+  console.log(avatar)
+  console.log(id)
+  const user = await db('users').where({ id }).update({
+    avatar
+  })
+  return user
+}
+
 async function updatePassword(fields = {}) {
   const { username = '', new_password = '' } = fields || {}
   const encryptedPassword = await bcrypt.hash(new_password, SALT_ROUNDS)
@@ -71,5 +81,6 @@ module.exports = {
   usersList,
   updateUser,
   updatePassword,
-  deleteUser
+  deleteUser,
+  updateAvatar
 }

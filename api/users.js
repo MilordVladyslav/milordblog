@@ -6,7 +6,8 @@ module.exports = autoCatch({
   updateUser,
   updatePassword,
   deleteUser,
-  getUser
+  getUser,
+  updateAvatar
 })
 
 async function createUser(req, res, next) {
@@ -16,6 +17,21 @@ async function createUser(req, res, next) {
   const user = await Users.create(req.body)
   const { username, role } = user
   res.json({ username, role })
+}
+
+async function updateAvatar(req, res, next) {
+  let errors = existedFields(req.files, ['avatar'])
+  if (errors.length) {
+    res.status(400).json({ errors: errors })
+  }
+  let { avatar = {} } = req.files || {}
+  let { id = -1 } = req.user
+  console.log(req.user)
+  const host = req.get('host')
+  console.log(avatar)
+  avatar = req.protocol + '://' + host + '/' + avatar[0].path
+  await Users.updateAvatar({ avatar, id })
+  res.status(200).json({ success: true })
 }
 
 async function getUser(req, res, next) {
@@ -92,4 +108,12 @@ async function deleteUser(req, res, next) {
     }
     res.json({ message: 'Your account is successfully deleted' })
   }
+}
+function existedFields(reqBody = [], requiredFields = []) {
+  const errors = []
+  for (let key in requiredFields) {
+    if (!reqBody[requiredFields[key]])
+      errors.push(`${requiredFields[key]} is required`)
+  }
+  return errors
 }

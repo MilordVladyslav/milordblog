@@ -17,7 +17,12 @@ app.get('/users-list', auth.ensureUser, apiUsers.usersList)
 app.get('/logout', auth.logout)
 app.get('/user/:id', apiUsers.getUser)
 app.put('/update-user', auth.ensureUser, apiUsers.updateUser)
-app.put('/update-avatar', auth.ensureUser)
+app.put(
+  '/update-avatar',
+  auth.ensureUser,
+  upload.fields([{ name: 'avatar' }]),
+  apiUsers.updateAvatar
+)
 app.put('/update-password', auth.authenticate, apiUsers.updatePassword)
 app.post('/create-user', apiUsers.createUser, auth.authenticate)
 app.post('/login', auth.authenticate, auth.login)
