@@ -2,11 +2,11 @@ const autoCatch = require('../lib/auto-catch')
 const Users = require('../models/users')
 module.exports = autoCatch({
   createUser,
-  login,
   usersList,
-  updateUsername,
+  updateUser,
   updatePassword,
-  deleteUser
+  deleteUser,
+  getUser
 })
 
 async function createUser(req, res, next) {
@@ -17,26 +17,51 @@ async function createUser(req, res, next) {
   const { username, role } = user
   res.json({ username, role })
 }
-async function login(req, res, next) {
-  const user = await Users.login(req.body)
-  const { username, role } = user
-  res.json({ username, role })
+
+async function getUser(req, res, next) {
+  const intId = parseInt(req.params.id)
+  const user = await Users.get('', intId)
+  const {
+    id = -1,
+    username = '',
+    role = '',
+    email = '',
+    avatar = '',
+    description = '',
+    gender = '',
+    residence_place = '',
+    birthday = '',
+    connections = [],
+    visibility = '',
+    created_at
+  } = user
+  res.json({
+    id,
+    username,
+    role,
+    email,
+    avatar,
+    description,
+    gender,
+    residence_place,
+    birthday,
+    connections,
+    visibility,
+    created_at
+  })
 }
 
 async function usersList(req, res, next) {
-  if (req.user.role === 'admin') {
-    const users = await Users.usersList(req.body)
-    res.json(users)
-  } else {
-    return res.status(400).json({ errors: 'The user should be an admin' })
-  }
+  const users = await Users.usersList(req.body)
+  res.json(users)
 }
 
-async function updateUsername(req, res, next) {
-  if (!req.body.new_username) {
-    return res.status(400).json({ errors: 'Username is required' })
-  }
-  const user = await Users.updateUsername(req.body)
+async function updateUser(req, res, next) {
+  // if (!req.body.new_username) {
+  //   return res.status(400).json({ errors: 'Username is required' })
+  // }
+  req.body.id = req.user.id
+  const user = await Users.updateUser(req.body)
   const { username, role } = user
   res.json({ username, role })
 }

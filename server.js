@@ -15,9 +15,11 @@ app.use(express.static('public'))
 
 app.get('/users-list', auth.ensureUser, apiUsers.usersList)
 app.get('/logout', auth.logout)
-app.put('/update-username', auth.authenticate, apiUsers.updateUsername)
+app.get('/user/:id', apiUsers.getUser)
+app.put('/update-user', auth.ensureUser, apiUsers.updateUser)
+app.put('/update-avatar', auth.ensureUser)
 app.put('/update-password', auth.authenticate, apiUsers.updatePassword)
-app.post('/create-user', apiUsers.createUser)
+app.post('/create-user', apiUsers.createUser, auth.authenticate)
 app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, apiUsers.deleteUser)
 
