@@ -1,7 +1,8 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 
-const api = require('./api')
+const apiUsers = require('./api/users')
+const apiArticles = require('./api/articles')
 const middleware = require('./middleware')
 const auth = require('./auth')
 const upload = require('./lib/file-upload')
@@ -12,24 +13,32 @@ app.use(express.json({ limit: '8192kb' }))
 app.use(cookieParser())
 app.use(express.static('public'))
 
-app.get('/users-list', auth.ensureUser, api.usersList)
+app.get('/users-list', auth.ensureUser, apiUsers.usersList)
 app.get('/logout', auth.logout)
-app.put('/update-username', auth.authenticate, api.updateUsername)
-app.put('/update-password', auth.authenticate, api.updatePassword)
-app.article('/users', api.createUser)
-app.article('/login', auth.authenticate, auth.login)
-app.delete('/delete-user', auth.authenticate, api.deleteUser)
+app.get('/user/:id', apiUsers.getUser)
+app.put('/update-user', auth.ensureUser, apiUsers.updateUser)
+app.put(
+  '/update-avatar',
+  auth.ensureUser,
+  upload.fields([{ name: 'avatar' }]),
+  apiUsers.updateAvatar
+)
+app.put('/update-password', auth.authenticate, apiUsers.updatePassword)
+app.post('/create-user', apiUsers.createUser, auth.authenticate)
+app.post('/login', auth.authenticate, auth.login)
+app.delete('/delete-user', auth.authenticate, apiUsers.deleteUser)
 
-app.article(
+app.get('/get-article', apiArticles.getArticle)
+app.get('/articles-list', apiArticles.articlesList)
+app.put('/update-article', auth.ensureUser, apiArticles.updateArticle)
+app.post(
   '/create-article',
   auth.ensureUser,
   upload.fields([{ name: 'article_files', maxCount: 100 }]),
-  api.createPost
+  apiArticles.createArticle
 )
-app.get('/get-article', api.getPost)
-app.get('/articles-list', api.postsList)
-app.put('/update-article', auth.ensureUser, api.updatePost)
-app.delete('/delete-article', auth.ensureUser, api.deletePost)
+app.delete('/delete-article', auth.ensureUser, apiArticles.deleteArticle)
+
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.notFound)

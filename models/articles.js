@@ -3,7 +3,7 @@ const db = require('../db')
 module.exports = {
   createPost,
   getPost,
-  postsList,
+  articlesList,
   updatePost,
   deletePost
 }
@@ -18,7 +18,7 @@ async function getPost(id = '') {
   return article[0]
 }
 
-async function postsList(opts = {}) {
+async function articlesList(opts = {}) {
   const { offset = 0, limit = 25, tag = '' } = opts
 
   const table = db('articles')
@@ -32,18 +32,18 @@ async function updatePost(fields = {}) {
   const {
     title = '',
     description = '',
-    post_id = '',
+    articles_id = '',
     id = '',
     files = []
   } = fields || {}
   const articles = await db('articles')
-    .where({ post_id, id })
+    .where({ articles_id, id })
     .update({ title, description, files })
   return articles
 }
 
 async function deletePost(fields = {}) {
-  const { post_id = '', id = '' } = fields || {}
-  const articles = await db('articles').where({ post_id, id }).del()
+  const { articles_id = '', id = '' } = fields || {}
+  const articles = await db('articles').where({ articles_id, id }).del()
   return articles
 }

@@ -9,16 +9,45 @@ async function create(fields = {}) {
   return fields
 }
 
-async function get(username = '') {
-  const user = await db('users').where({ username })
+async function get(username = '', id = -1) {
+  let user = {}
+  if (id > -1) {
+    user = await db('users').where({ id })
+  } else if (username) {
+    user = await db('users').where({ username })
+  }
+
   return user[0]
 }
 
-async function updateUsername(fields = {}) {
-  const { username = '', new_username = '' } = fields || {}
-  const user = await db('users')
-    .where({ username })
-    .update('username', new_username)
+async function updateUser(fields = {}) {
+  const {
+    username = '',
+    id = -1,
+    description = '',
+    gender = '',
+    residence_place = '',
+    birthday = '',
+    visibility = ''
+  } = fields || {}
+  const user = await db('users').where({ id }).update({
+    username,
+    description,
+    gender,
+    residence_place,
+    birthday,
+    visibility
+  })
+  return user
+}
+
+async function updateAvatar(fields = {}) {
+  const { avatar = '', id = -1 } = fields
+  console.log(avatar)
+  console.log(id)
+  const user = await db('users').where({ id }).update({
+    avatar
+  })
   return user
 }
 
@@ -50,7 +79,8 @@ module.exports = {
   create,
   get,
   usersList,
-  updateUsername,
+  updateUser,
   updatePassword,
-  deleteUser
+  deleteUser,
+  updateAvatar
 }
