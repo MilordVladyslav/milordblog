@@ -22,7 +22,6 @@ async function createUser(req, res, next) {
   }
   const preparedValues = trimStrings(req.body)
   const user = await Users.create(preparedValues)
-  console.log(req.user)
   if (user.severity) {
     return res.status(500).json({ errors: 'An unexpected error occurred' })
   }
@@ -54,7 +53,6 @@ async function updateAvatar(req, res, next) {
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
-  console.log(avatar)
   res.status(200).json({ success: true })
 }
 
@@ -131,9 +129,7 @@ async function usersList(req, res, next) {
 
 async function updateUser(req, res, next) {
   const preparedValues = trimStrings(req.body)
-  console.log(preparedValues)
   req.body.id = req.user.id
-  console.log(req.user)
   const user = await Users.updateUser(preparedValues)
   if (user.severity) {
     return res.status(500).json({ errors: 'An unexpected error occurred' })

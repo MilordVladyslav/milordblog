@@ -14,10 +14,6 @@ async function create(fields = {}) {
   return { success: true }
 }
 
-<<<<<<< HEAD
-async function get(id = -1) {
-  const user = await db('users').where({ id })
-=======
 async function get(username = '', id = -1) {
   let user = {}
   if (id > -1) {
@@ -26,7 +22,6 @@ async function get(username = '', id = -1) {
     user = await db('users').where({ username })
   }
 
->>>>>>> 05f73f483e56511e673c3ae2b66bf2883092ea1f
   return user[0]
 }
 // id,
@@ -40,24 +35,6 @@ async function get(username = '', id = -1) {
 
 async function updateUser(fields = {}) {
   const {
-<<<<<<< HEAD
-    id = -1,
-    username = '',
-    birthday = '',
-    visibility = '',
-    gender = '',
-    description = ''
-  } = fields || {}
-  await db('users').where({ id }).update({
-    username,
-    birthday,
-    visibility,
-    gender,
-    description
-  })
-  const updatedUser = await get(id)
-  return updatedUser
-=======
     username = '',
     id = -1,
     description = '',
@@ -85,7 +62,6 @@ async function updateAvatar(fields = {}) {
     avatar_path
   })
   return user
->>>>>>> 05f73f483e56511e673c3ae2b66bf2883092ea1f
 }
 
 async function updatePassword(fields = {}) {
