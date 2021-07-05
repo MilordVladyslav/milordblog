@@ -1,24 +1,24 @@
 const db = require('../db')
 
 module.exports = {
-  createPost,
-  getPost,
-  postsList,
-  updatePost,
-  deletePost
+  createArticle,
+  getArticle,
+  articlesList,
+  updateArticle,
+  deleteArticle
 }
 
-async function createPost(fields = {}) {
+async function createArticle(fields = {}) {
   const article = await db('articles').insert(fields)
   return article
 }
 
-async function getPost(id = '') {
+async function getArticle(id = '') {
   const article = await db('articles').where({ id })
   return article[0]
 }
 
-async function postsList(opts = {}) {
+async function articlesList(opts = {}) {
   const { offset = 0, limit = 25, tag = '' } = opts
 
   const table = db('articles')
@@ -28,22 +28,23 @@ async function postsList(opts = {}) {
   return result
 }
 
-async function updatePost(fields = {}) {
+async function updateArticle(fields = {}) {
   const {
     title = '',
     description = '',
-    post_id = '',
+    reference_id = '',
     id = '',
-    files = []
+    files = ['']
   } = fields || {}
+  console.log(id)
   const articles = await db('articles')
-    .where({ post_id, id })
+    .where({ reference_id, id })
     .update({ title, description, files })
   return articles
 }
 
-async function deletePost(fields = {}) {
-  const { post_id = '', id = '' } = fields || {}
-  const articles = await db('articles').where({ post_id, id }).del()
+async function deleteArticle(fields = {}) {
+  const { reference_id = '', id = '' } = fields || {}
+  const articles = await db('articles').where({ reference_id, id }).del()
   return articles
 }

@@ -14,8 +14,19 @@ async function create(fields = {}) {
   return { success: true }
 }
 
+<<<<<<< HEAD
 async function get(id = -1) {
   const user = await db('users').where({ id })
+=======
+async function get(username = '', id = -1) {
+  let user = {}
+  if (id > -1) {
+    user = await db('users').where({ id })
+  } else if (username) {
+    user = await db('users').where({ username })
+  }
+
+>>>>>>> 05f73f483e56511e673c3ae2b66bf2883092ea1f
   return user[0]
 }
 // id,
@@ -29,6 +40,7 @@ async function get(id = -1) {
 
 async function updateUser(fields = {}) {
   const {
+<<<<<<< HEAD
     id = -1,
     username = '',
     birthday = '',
@@ -45,6 +57,35 @@ async function updateUser(fields = {}) {
   })
   const updatedUser = await get(id)
   return updatedUser
+=======
+    username = '',
+    id = -1,
+    description = '',
+    gender = '',
+    residence_place = '',
+    birthday = '',
+    visibility = ''
+  } = fields || {}
+  const user = await db('users').where({ id }).update({
+    username,
+    description,
+    gender,
+    residence_place,
+    birthday,
+    visibility
+  })
+  return user
+}
+
+async function updateAvatar(fields = {}) {
+  const { avatar_path = '', id = -1 } = fields
+  console.log(avatar_path)
+  console.log(id)
+  const user = await db('users').where({ id }).update({
+    avatar_path
+  })
+  return user
+>>>>>>> 05f73f483e56511e673c3ae2b66bf2883092ea1f
 }
 
 async function updatePassword(fields = {}) {
@@ -77,5 +118,6 @@ module.exports = {
   usersList,
   updateUser,
   updatePassword,
-  deleteUser
+  deleteUser,
+  updateAvatar
 }

@@ -5,7 +5,7 @@ exports.up = function (knex) {
     table.string('password').notNullable()
     table.string('role').notNullable().defaultTo('user')
     table.string('email').notNullable()
-    table.string('avatar')
+    table.string('avatar_path')
     table.string('description')
     table.string('gender')
     table.string('residence_place')
