@@ -9,8 +9,8 @@ module.exports = autoCatch({
 })
 
 async function createArticle(req, res, next) {
-  req.body.post_id = req.user.id
-  let errors = existedFields(req.body, ['title', 'description', 'post_id'])
+  req.body.reference_id = req.user.id
+  let errors = existedFields(req.body, ['title', 'description', 'reference_id'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
@@ -31,22 +31,22 @@ async function createArticle(req, res, next) {
 }
 
 async function getArticle(req, res, next) {
-  let errors = existedFields(req.query, ['id'])
+  let errors = existedFields(req.params, ['id'])
   if (errors.length) {
     res.status(400).json({ errors })
   }
-  const article = await Articles.getArticle(req.query.id)
+  const article = await Articles.getArticle(req.params.id)
   res.json(article)
 }
 
 async function articlesList(req, res, next) {
-  const articles = await Articles.articlesList(req.body)
+  const articles = await Articles.articlesList(req.params.id)
   res.json(articles)
 }
 
 async function updateArticle(req, res, next) {
-  req.body.post_id = req.user.id
-  let errors = existedFields(req.body, ['title', 'description', 'post_id'])
+  req.body.reference_id = req.user.id
+  let errors = existedFields(req.body, ['title', 'description', 'reference_id'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
@@ -65,7 +65,7 @@ function existedFields(reqFields = [], requiredFields = []) {
 }
 
 async function deleteArticle(req, res, next) {
-  req.body.post_id = req.user.id
+  req.body.reference_id = req.user.id
   let errors = existedFields(req.body, ['id'])
   if (errors.length) {
     res.status(400).json({ errors })
@@ -73,4 +73,13 @@ async function deleteArticle(req, res, next) {
   await Articles.deleteArticle(req.body)
   const articles = await Articles.articlesList()
   res.json(articles)
+}
+
+function existedFields(reqBody = [], requiredFields = []) {
+  const errors = []
+  for (let key in requiredFields) {
+    if (!reqBody[requiredFields[key]])
+      errors.push(`${requiredFields[key]} is required`)
+  }
+  return errors
 }

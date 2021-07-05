@@ -20,7 +20,7 @@ app.put('/update-user', auth.ensureUser, apiUsers.updateUser)
 app.put(
   '/update-avatar',
   auth.ensureUser,
-  upload.fields([{ name: 'avatar' }]),
+  upload.fields([{ name: 'avatar_path' }]),
   apiUsers.updateAvatar
 )
 app.put('/update-password', auth.authenticate, apiUsers.updatePassword)
@@ -28,8 +28,10 @@ app.post('/create-user', apiUsers.createUser, auth.authenticate)
 app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, apiUsers.deleteUser)
 
-app.get('/get-article', apiArticles.getArticle)
-app.get('/articles-list', apiArticles.articlesList)
+// articles
+
+app.get('/get-article/:id', apiArticles.getArticle)
+app.get('/articles-list/:user_id', apiArticles.articlesList)
 app.put('/update-article', auth.ensureUser, apiArticles.updateArticle)
 app.post(
   '/create-article',

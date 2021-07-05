@@ -42,11 +42,11 @@ async function updateUser(fields = {}) {
 }
 
 async function updateAvatar(fields = {}) {
-  const { avatar = '', id = -1 } = fields
-  console.log(avatar)
+  const { avatar_path = '', id = -1 } = fields
+  console.log(avatar_path)
   console.log(id)
   const user = await db('users').where({ id }).update({
-    avatar
+    avatar_path
   })
   return user
 }

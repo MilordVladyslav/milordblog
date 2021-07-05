@@ -20,17 +20,15 @@ async function createUser(req, res, next) {
 }
 
 async function updateAvatar(req, res, next) {
-  let errors = existedFields(req.files, ['avatar'])
+  let errors = existedFields(req.files, ['avatar_path'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
-  let { avatar = {} } = req.files || {}
+  let { avatar_path = {} } = req.files || {}
   let { id = -1 } = req.user
-  console.log(req.user)
   const host = req.get('host')
-  console.log(avatar)
-  avatar = req.protocol + '://' + host + '/' + avatar[0].path
-  await Users.updateAvatar({ avatar, id })
+  avatar_path = req.protocol + '://' + host + '/' + avatar_path[0].path
+  await Users.updateAvatar({ avatar_, id })
   res.status(200).json({ success: true })
 }
 
@@ -42,7 +40,7 @@ async function getUser(req, res, next) {
     username = '',
     role = '',
     email = '',
-    avatar = '',
+    avatar_path = '',
     description = '',
     gender = '',
     residence_place = '',
@@ -56,7 +54,7 @@ async function getUser(req, res, next) {
     username,
     role,
     email,
-    avatar,
+    avatar_path,
     description,
     gender,
     residence_place,
