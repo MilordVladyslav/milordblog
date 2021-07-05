@@ -1,8 +1,8 @@
 exports.up = function (knex) {
   return knex.schema.createTable('articles', function (table) {
     table.increments()
-    table.integer('article_id').notNullable().unsigned()
-    table.foreign('article_id').references('users.id').onDelete('CASCADE')
+    table.integer('reference_id').notNullable().unsigned()
+    table.foreign('reference_id').references('users.id').onDelete('CASCADE')
     table.string('title').notNullable()
     table.string('description').notNullable()
     table.specificType('files', 'TEXT[]')

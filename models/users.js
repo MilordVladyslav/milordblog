@@ -5,8 +5,12 @@ const SALT_ROUNDS = 10
 async function create(fields = {}) {
   const { password = '' } = fields || {}
   fields.password = await bcrypt.hash(password, SALT_ROUNDS)
-  await db('users').insert(fields)
-  return fields
+  try {
+    const user = await db('users').insert(fields)
+  } catch (err) {
+    return err
+  }
+  return { success: true }
 }
 
 async function get(username = '', id = -1) {
@@ -19,6 +23,14 @@ async function get(username = '', id = -1) {
 
   return user[0]
 }
+// id,
+// username,
+// role,
+// birthday,
+// visibility,
+// gender,
+// description,
+// avatar
 
 async function updateUser(fields = {}) {
   const {
@@ -42,9 +54,9 @@ async function updateUser(fields = {}) {
 }
 
 async function updateAvatar(fields = {}) {
-  const { avatar = '', id = -1 } = fields
+  const { avatar_path = '', id = -1 } = fields
   const user = await db('users').where({ id }).update({
-    avatar
+    avatar_path
   })
   return user
 }
