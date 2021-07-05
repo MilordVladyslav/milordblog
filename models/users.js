@@ -7,7 +7,6 @@ async function create(fields = {}) {
   fields.password = await bcrypt.hash(password, SALT_ROUNDS)
   try {
     const user = await db('users').insert(fields)
-    console.log(user)
   } catch (err) {
     return err
   }
@@ -56,8 +55,6 @@ async function updateUser(fields = {}) {
 
 async function updateAvatar(fields = {}) {
   const { avatar_path = '', id = -1 } = fields
-  console.log(avatar_path)
-  console.log(id)
   const user = await db('users').where({ id }).update({
     avatar_path
   })

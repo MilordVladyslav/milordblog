@@ -36,7 +36,6 @@ async function updateArticle(fields = {}) {
     id = '',
     files = ['']
   } = fields || {}
-  console.log(id)
   const articles = await db('articles')
     .where({ reference_id, id })
     .update({ title, description, files })
