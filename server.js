@@ -15,19 +15,6 @@ app.use(express.static('public'))
 
 app.get('/users-list', auth.ensureUser, apiUsers.usersList)
 app.get('/logout', auth.logout)
-<<<<<<< HEAD
-
-app.put('/update-user', auth.ensureUser, api.updateUser) //ok
-app.put(
-  '/update-avatar',
-  auth.ensureUser,
-  upload.fields([{ name: 'avatar' }]),
-  api.updateAvatar
-)
-app.put('/update-password', auth.authenticate, api.updatePassword)
-app.post('/create-user', api.createUser) //ok
-
-=======
 app.get('/user/:id', apiUsers.getUser)
 app.put('/update-user', auth.ensureUser, apiUsers.updateUser)
 app.put(
@@ -38,7 +25,6 @@ app.put(
 )
 app.put('/update-password', auth.authenticate, apiUsers.updatePassword)
 app.post('/create-user', apiUsers.createUser, auth.authenticate)
->>>>>>> 05f73f483e56511e673c3ae2b66bf2883092ea1f
 app.post('/login', auth.authenticate, auth.login)
 app.delete('/delete-user', auth.authenticate, apiUsers.deleteUser)
 
@@ -50,13 +36,8 @@ app.put('/update-article', auth.ensureUser, apiArticles.updateArticle)
 app.post(
   '/create-article',
   auth.ensureUser,
-<<<<<<< HEAD
-  upload.fields([{ name: 'article_files' }]),
-  api.createPost
-=======
   upload.fields([{ name: 'article_files', maxCount: 100 }]),
   apiArticles.createArticle
->>>>>>> 05f73f483e56511e673c3ae2b66bf2883092ea1f
 )
 app.delete('/delete-article', auth.ensureUser, apiArticles.deleteArticle)
 
