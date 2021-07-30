@@ -14,9 +14,12 @@ async function createUser(req, res, next) {
   if (!req.body.password) {
     return res.status(400).json({ errors: 'Password is required' })
   }
-  const user = await Users.create(req.body)
-  const { username, role } = user
-  res.json({ username, role })
+  const isRegisteredUser = await Users.get(req.body.username)
+  if (isRegisteredUser) {
+    res.json({ errors: 'This user is already registered' })
+  }
+  await Users.create(req.body)
+  res.json({ success: true })
 }
 
 async function updateAvatar(req, res, next) {
@@ -28,7 +31,7 @@ async function updateAvatar(req, res, next) {
   let { id = -1 } = req.user
   const host = req.get('host')
   avatar_path = req.protocol + '://' + host + '/' + avatar_path[0].path
-  await Users.updateAvatar({ avatar_, id })
+  await Users.updateAvatar({ avatar_path, id })
   res.status(200).json({ success: true })
 }
 
@@ -91,6 +94,7 @@ async function updatePassword(req, res, next) {
 
 async function deleteUser(req, res, next) {
   const username = req.body.delete_username || ''
+  console.log('here')
   if (req.user.role === 'admin') {
     const users = await Users.deleteUser(username)
     res.json(users)
