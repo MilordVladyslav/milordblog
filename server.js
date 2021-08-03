@@ -1,11 +1,10 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 
-const apiUsers = require('./api/users')
-const apiArticles = require('./api/articles')
+const { apiUsers, apiArticles, apiComments } = require('./api')
 const middleware = require('./middleware')
 const auth = require('./auth')
-const upload = require('./lib/file-upload')
+const { upload } = require('./lib/file-upload')
 const port = process.env.PORT || 8080
 const app = express()
 app.use(middleware.cors)
@@ -40,6 +39,20 @@ app.post(
   apiArticles.createArticle
 )
 app.delete('/delete-article', auth.ensureUser, apiArticles.deleteArticle)
+
+//comment
+
+app.post(
+  '/create-comment/',
+  auth.ensureUser,
+  upload.fields([{ name: 'comment_attachments', maxCount: 8 }]),
+  apiComments.createComment
+)
+
+app.get('/get-comment/:id', apiComments.getComment)
+app.get('/comments-list/:entity_id', apiComments.getCommentsList)
+app.put('/update-comment/', apiComments.updateComment)
+app.delete('/delete-comment/', apiComments.deleteComment)
 
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)

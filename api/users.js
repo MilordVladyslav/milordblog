@@ -10,7 +10,7 @@ module.exports = autoCatch({
   updateAvatar
 })
 
-async function createUser(req, res, next) {
+async function createUser(req, res) {
   if (!req.body.password) {
     return res.status(400).json({ errors: 'Password is required' })
   }
@@ -22,7 +22,7 @@ async function createUser(req, res, next) {
   res.json({ success: true })
 }
 
-async function updateAvatar(req, res, next) {
+async function updateAvatar(req, res) {
   let errors = existedFields(req.files, ['avatar_path'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
@@ -35,7 +35,7 @@ async function updateAvatar(req, res, next) {
   res.status(200).json({ success: true })
 }
 
-async function getUser(req, res, next) {
+async function getUser(req, res) {
   const intId = parseInt(req.params.id)
   const user = await Users.get('', intId)
   const {
@@ -68,12 +68,12 @@ async function getUser(req, res, next) {
   })
 }
 
-async function usersList(req, res, next) {
+async function usersList(req, res) {
   const users = await Users.usersList(req.body)
   res.json(users)
 }
 
-async function updateUser(req, res, next) {
+async function updateUser(req, res) {
   // if (!req.body.new_username) {
   //   return res.status(400).json({ errors: 'Username is required' })
   // }
@@ -83,7 +83,7 @@ async function updateUser(req, res, next) {
   res.json({ username, role })
 }
 
-async function updatePassword(req, res, next) {
+async function updatePassword(req, res) {
   if (!req.body.new_password) {
     return res.status(400).json({ errors: 'password is required' })
   }
@@ -92,9 +92,8 @@ async function updatePassword(req, res, next) {
   res.json({ username, role })
 }
 
-async function deleteUser(req, res, next) {
+async function deleteUser(req, res) {
   const username = req.body.delete_username || ''
-  console.log('here')
   if (req.user.role === 'admin') {
     const users = await Users.deleteUser(username)
     res.json(users)
@@ -106,7 +105,7 @@ async function deleteUser(req, res, next) {
         .status(401)
         .json({ errors: 'You do not have a permission to delete others' })
     } else {
-      Users.deleteUser(username)
+      await Users.deleteUser(username)
     }
     res.json({ message: 'Your account is successfully deleted' })
   }
