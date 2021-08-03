@@ -1,5 +1,6 @@
 const autoCatch = require('../lib/auto-catch')
 const Articles = require('../models/articles')
+const existedFields = require('../utils/existedFields')
 module.exports = autoCatch({
   createArticle,
   getArticle,
@@ -8,7 +9,7 @@ module.exports = autoCatch({
   deleteArticle
 })
 
-async function createArticle(req, res, next) {
+async function createArticle(req, res) {
   req.body.reference_id = req.user.id
   let errors = existedFields(req.body, ['title', 'description', 'reference_id'])
   if (errors.length) {
@@ -30,7 +31,7 @@ async function createArticle(req, res, next) {
   res.json(articles)
 }
 
-async function getArticle(req, res, next) {
+async function getArticle(req, res) {
   let errors = existedFields(req.params, ['id'])
   if (errors.length) {
     res.status(400).json({ errors })
@@ -39,12 +40,12 @@ async function getArticle(req, res, next) {
   res.json(article)
 }
 
-async function articlesList(req, res, next) {
+async function articlesList(req, res) {
   const articles = await Articles.articlesList(req.params.id)
   res.json(articles)
 }
 
-async function updateArticle(req, res, next) {
+async function updateArticle(req, res) {
   req.body.reference_id = req.user.id
   let errors = existedFields(req.body, ['title', 'description', 'reference_id'])
   if (errors.length) {
@@ -55,16 +56,7 @@ async function updateArticle(req, res, next) {
   res.json(articles)
 }
 
-function existedFields(reqFields = [], requiredFields = []) {
-  const errors = []
-  for (let key in requiredFields) {
-    if (!reqFields[requiredFields[key]])
-      errors.push(`${requiredFields[key]} is required`)
-  }
-  return errors
-}
-
-async function deleteArticle(req, res, next) {
+async function deleteArticle(req, res) {
   req.body.reference_id = req.user.id
   let errors = existedFields(req.body, ['id'])
   if (errors.length) {
@@ -73,13 +65,4 @@ async function deleteArticle(req, res, next) {
   await Articles.deleteArticle(req.body)
   const articles = await Articles.articlesList()
   res.json(articles)
-}
-
-function existedFields(reqBody = [], requiredFields = []) {
-  const errors = []
-  for (let key in requiredFields) {
-    if (!reqBody[requiredFields[key]])
-      errors.push(`${requiredFields[key]} is required`)
-  }
-  return errors
 }

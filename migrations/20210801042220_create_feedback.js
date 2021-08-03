@@ -6,7 +6,6 @@ exports.up = function (knex) {
     table.text('comment')
     table.specificType('comment_attachments', 'TEXT[]')
     table.boolean('seen').notNullable()
-
   })
 }
 exports.down = function (knex) {
