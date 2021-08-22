@@ -53,7 +53,7 @@ app.get('/get-comment/:id', apiComments.getComment)
 app.get('/comments-list/:entity_id', apiComments.getCommentsList)
 app.put('/update-comment/', apiComments.updateComment)
 app.delete('/delete-comment/', apiComments.deleteComment)
-
+//
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.notFound)
