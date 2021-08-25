@@ -1,7 +1,7 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 
-const { apiUsers, apiArticles, apiComments } = require('./api')
+const { apiUsers, apiArticles, apiComments, apiConnections } = require('./api')
 const middleware = require('./middleware')
 const auth = require('./auth')
 const { upload } = require('./lib/file-upload')
@@ -53,7 +53,12 @@ app.get('/get-comment/:id', apiComments.getComment)
 app.get('/comments-list/:entity_id', apiComments.getCommentsList)
 app.put('/update-comment/', apiComments.updateComment)
 app.delete('/delete-comment/', apiComments.deleteComment)
-//
+
+app.post('/connections', auth.ensureUser, apiConnections.create)
+app.put('/connections', auth.ensureUser, apiConnections.update)
+app.get('/connections', auth.ensureUser, apiConnections.read)
+app.delete('/connections', auth.ensureUser, apiConnections.del)
+
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.notFound)
