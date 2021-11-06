@@ -1,7 +1,8 @@
 const db = require('../db')
 
 module.exports = {
-  createMessage
+  createMessage,
+  updateMessage
   // getMessages,
   // updateMessage,
   // deleteMessage
@@ -10,6 +11,21 @@ module.exports = {
 async function createMessage(fields = {}) {
   const messages = await db('messaging').insert(fields)
   return messages
+}
+
+async function updateMessage(fields = {}) {
+  const {
+    from_id = -1,
+    to_id = -1,
+    reactions = '',
+    message = '',
+    attachments = [''],
+    status = 'pending'
+  } = fields || {}
+  const messaging = await db('messaging')
+    .where({ from_id, to_id })
+    .update({ reactions, message, attachments, status })
+  return messaging
 }
 //
 // async function createArticle(fields = {}) {
