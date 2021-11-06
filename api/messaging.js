@@ -26,7 +26,6 @@ async function createMessage(req, res) {
   if (!req.body.attachments.length && !req.body.message) {
     res.status(400).json({ errors: ['message or file attachment is required'] })
   }
-  console.log(req.body)
   const messages = Messaging.createMessage(req.body)
   res.status(200).json(messages)
 }
