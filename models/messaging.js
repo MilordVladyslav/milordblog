@@ -2,7 +2,8 @@ const db = require('../db')
 
 module.exports = {
   createMessage,
-  updateMessage
+  updateMessage,
+  getMessages
   // getMessages,
   // updateMessage,
   // deleteMessage
@@ -34,6 +35,25 @@ async function updateMessage(fields = {}) {
     .update({ reactions, message, attachments, status })
   return messaging
 }
+
+// async function getCommentsList(entity_id = -1, opts = {}) {
+//   const { offset = 0, limit = 25, tag = '' } = opts
+//   entity_id = parseInt(entity_id)
+//   const table = db('feedback')
+//   const query = table.whereRaw('entity_id = ?', [entity_id])
+//
+//   const result = await query.orderBy('id').limit(limit).offset(offset)
+//   return result
+// }
+
+async function getMessages(fields) {
+  const { offset = 0, limit = 25, from_id = -1, to_id = -1 } = fields
+  const table = db('messaging')
+  const query = table.whereRaw('from_id = ? AND to_id = ?', [from_id, to_id])
+  const result = await query.orderBy('id').limit(limit).offset(offset)
+  return result
+}
+
 //
 // async function createArticle(fields = {}) {
 //   const article = await db('articles').insert(fields)

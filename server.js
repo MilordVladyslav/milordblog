@@ -65,6 +65,8 @@ app.put('/connections', auth.ensureUser, apiConnections.update)
 app.get('/connections', auth.ensureUser, apiConnections.read)
 app.delete('/connections', auth.ensureUser, apiConnections.del)
 
+app.post('/get-messages', auth.ensureUser, apiMessaging.getMessages)
+
 app.post(
   '/messaging',
   auth.ensureUser,

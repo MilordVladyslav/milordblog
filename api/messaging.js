@@ -4,7 +4,8 @@ const existedFields = require('../utils/existedFields')
 
 module.exports = autoCatch({
   createMessage,
-  updateMessage
+  updateMessage,
+  getMessages
 })
 
 async function createMessage(req, res) {
@@ -27,7 +28,7 @@ async function createMessage(req, res) {
   if (!req.body.attachments.length && !req.body.message) {
     res.status(400).json({ errors: ['message or file attachment is required'] })
   }
-  const messages = Messaging.createMessage(req.body)
+  const messages = await Messaging.createMessage(req.body)
   res.status(200).json(messages)
 }
 
@@ -52,6 +53,16 @@ async function updateMessage(req, res) {
   if (!req.body.attachments.length && !req.body.message) {
     res.status(400).json({ errors: ['message or file attachment is required'] })
   }
-  const messages = Messaging.updateMessage(req.body)
+  const messages = await Messaging.updateMessage(req.body)
+  res.status(200).json(messages)
+}
+
+async function getMessages(req, res) {
+  req.body.from_id = req.user.id
+  const errors = existedFields(req.body, ['to_id'])
+  if (errors.length) {
+    res.status(400).json({ errors: errors })
+  }
+  const messages = await Messaging.getMessages(req.body)
   res.status(200).json(messages)
 }
