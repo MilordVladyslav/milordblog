@@ -17,13 +17,20 @@ async function updateMessage(fields = {}) {
   const {
     from_id = -1,
     to_id = -1,
-    reactions = '',
+    reactions = [''],
     message = '',
     attachments = [''],
     status = 'pending'
   } = fields || {}
+
   const messaging = await db('messaging')
-    .where({ from_id, to_id })
+    .whereIn(
+      ['from_id', 'to_id'],
+      [
+        [from_id, to_id],
+        [from_id, to_id]
+      ]
+    )
     .update({ reactions, message, attachments, status })
   return messaging
 }
