@@ -3,10 +3,8 @@ const db = require('../db')
 module.exports = {
   createMessage,
   updateMessage,
-  getMessages
-  // getMessages,
-  // updateMessage,
-  // deleteMessage
+  getMessages,
+  deleteMessage
 }
 
 async function createMessage(fields = {}) {
@@ -36,16 +34,6 @@ async function updateMessage(fields = {}) {
   return messaging
 }
 
-// async function getCommentsList(entity_id = -1, opts = {}) {
-//   const { offset = 0, limit = 25, tag = '' } = opts
-//   entity_id = parseInt(entity_id)
-//   const table = db('feedback')
-//   const query = table.whereRaw('entity_id = ?', [entity_id])
-//
-//   const result = await query.orderBy('id').limit(limit).offset(offset)
-//   return result
-// }
-
 async function getMessages(fields) {
   const { offset = 0, limit = 25, from_id = -1, to_id = -1 } = fields
   const table = db('messaging')
@@ -54,43 +42,8 @@ async function getMessages(fields) {
   return result
 }
 
-//
-// async function createArticle(fields = {}) {
-//   const article = await db('articles').insert(fields)
-//   return article
-// }
-//
-// async function getArticle(id = '') {
-//   const article = await db('articles').where({ id })
-//   return article[0]
-// }
-//
-// async function articlesList(opts = {}) {
-//   const { offset = 0, limit = 25, tag = '' } = opts
-//
-//   const table = db('articles')
-//   const query = tag ? table.whereRaw('? = ANY (tags)', [tag]) : table
-//
-//   const result = await query.orderBy('id').limit(limit).offset(offset)
-//   return result
-// }
-//
-// async function updateArticle(fields = {}) {
-//   const {
-//     title = '',
-//     description = '',
-//     reference_id = '',
-//     id = '',
-//     files = ['']
-//   } = fields || {}
-//   const articles = await db('articles')
-//     .where({ reference_id, id })
-//     .update({ title, description, files })
-//   return articles
-// }
-//
-// async function deleteArticle(fields = {}) {
-//   const { reference_id = '', id = '' } = fields || {}
-//   const articles = await db('articles').where({ reference_id, id }).del()
-//   return articles
-// }
+async function deleteMessage(fields = {}) {
+  const { id = -1, from_id = -1, to_id = -1 } = fields
+  const messages = await db('messaging').where({ id, from_id, to_id }).del()
+  return messages
+}

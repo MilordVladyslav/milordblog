@@ -81,6 +81,8 @@ app.put(
   apiMessaging.updateMessage
 )
 
+app.delete('/delete-message', auth.ensureUser, apiMessaging.deleteMessage)
+
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
 app.use(middleware.notFound)
