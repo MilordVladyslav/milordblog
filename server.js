@@ -1,7 +1,13 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 
-const { apiUsers, apiArticles, apiComments, apiConnections } = require('./api')
+const {
+  apiUsers,
+  apiArticles,
+  apiComments,
+  apiConnections,
+  apiMessaging
+} = require('./api')
 const middleware = require('./middleware')
 const auth = require('./auth')
 const { upload } = require('./lib/file-upload')
@@ -58,6 +64,24 @@ app.post('/connections', auth.ensureUser, apiConnections.create)
 app.put('/connections', auth.ensureUser, apiConnections.update)
 app.get('/connections', auth.ensureUser, apiConnections.read)
 app.delete('/connections', auth.ensureUser, apiConnections.del)
+
+app.post('/get-messages', auth.ensureUser, apiMessaging.getMessages)
+
+app.post(
+  '/messaging',
+  auth.ensureUser,
+  upload.fields([{ name: 'file_attachments', maxCount: 8 }]),
+  apiMessaging.createMessage
+)
+
+app.put(
+  '/update-message',
+  auth.ensureUser,
+  upload.fields([{ name: 'file_attachments', maxCount: 8 }]),
+  apiMessaging.updateMessage
+)
+
+app.delete('/delete-message', auth.ensureUser, apiMessaging.deleteMessage)
 
 app.use(middleware.handleValidationError)
 app.use(middleware.handleError)
