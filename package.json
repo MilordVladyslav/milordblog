@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "test",
-    "start": "nodemon --watch . --exec babel-node -- server"
+    "start": "nodemon --watch . --exec babel-node -- server",
+    "make-directories": "node lib/make-directories.js"
   },
   "repository": {
     "type": "git",
