@@ -1,16 +1,17 @@
 const autoCatch = require('../lib/auto-catch')
 const Messaging = require('../models/messaging')
 const existedFields = require('../utils/existedFields')
-
+const fs = require('fs')
 module.exports = autoCatch({
   createMessage,
   updateMessage,
-  getMessages
+  getMessages,
+  deleteMessage
 })
 
 async function createMessage(req, res) {
   req.body.from_id = req.user.id
-  const errors = existedFields(req.body, ['from_id', 'to_id'])
+  const errors = existedFields(req.body, ['from_id', 'to_id', 'message'])
   if (errors.length) {
     res.status(400).json({ errors: errors })
   }
@@ -64,5 +65,20 @@ async function getMessages(req, res) {
     res.status(400).json({ errors: errors })
   }
   const messages = await Messaging.getMessages(req.body)
+  res.status(200).json(messages)
+}
+
+async function deleteMessage(req, res) {
+  req.body.from_id = req.user.id
+  const errors = existedFields(req.body, ['from_id', 'to_id'])
+  if (errors.length) {
+    req.status(400).json({ errors: errors })
+  }
+  let dirPath = `./public/messaging/user_${req.body.from_id}_user_${req.body.to_id}`
+  const dirFiles = fs.readdirSync(dirPath)
+  for (let i = 0; dirFiles.length; i++) {
+    fs.unlinkSync(dirPath + `/${dirFiles[i]}`)
+  }
+  const messages = await Messaging.deleteMessage(req.body)
   res.status(200).json(messages)
 }
