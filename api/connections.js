@@ -1,23 +1,27 @@
 const existedFields = require('../utils/existedFields')
 const connections = require('../models/connections')
-
+const Users = require('../models/users')
 async function create(req, res) {
   req.body.from_id = req.user.id
   const errors = existedFields(req.body, ['from_id', 'to_id'])
   if (errors.length) {
     res.status(400).json({ errors })
   }
+  let existedUser = await Users.get('', req.body.to_id)
+  if (!existedUser) {
+    return res.status(400).json({
+      errors: ['this user does not exist']
+    })
+  }
   const result = connections.create(req.body)
   res.status(200).json(result)
 }
 
 async function update(req, res) {
-  const errors = existedFields(req.body, ['from_id', 'to_id', 'status'])
+  const errors = existedFields(req.body, ['to_id', 'status'])
+  req.body.to_id = req.user.id
   if (errors.length) {
     res.status(400).json({ errors })
-  }
-  if (req.user.id !== req.body.to_id) {
-    res.status(403).json({ errors: ['Forbidden'] })
   }
   const result = connections.update(req.body)
   res.status(200).json(result)
@@ -26,7 +30,6 @@ async function update(req, res) {
 async function read(req, res) {
   req.body.to_id = req.user.id
   const result = await connections.read(req.body)
-  console.log(result)
   res.status(200).json({ result })
 }
 

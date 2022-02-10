@@ -28,7 +28,6 @@ async function getCommentsList(entity_id = -1, opts = {}) {
 }
 
 async function updateComment(fields = {}) {
-
   const { id = -1, comment = '', comment_attachments = [''] } = fields || {}
   const feedback = await db('feedback')
     .where({ id })
@@ -37,7 +36,6 @@ async function updateComment(fields = {}) {
 }
 
 async function deleteComment(id = -1) {
-  console.log(id)
   const result = await db('feedback').where({ id }).del()
   return result
 }
